@@ -1,5 +1,6 @@
 package com.example.pr15;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -59,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         }
         catch (Exception ex){
             ex.printStackTrace();
+        }
+    }
+    public void recordStop(View view){
+        if(mediaRecorder != null) {
+            mediaRecorder.stop();
         }
     }
 }
