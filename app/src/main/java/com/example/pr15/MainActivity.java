@@ -67,4 +67,23 @@ public class MainActivity extends AppCompatActivity {
             mediaRecorder.stop();
         }
     }
+    private void releasePlayer(){
+        if(mediaPlayer != null){
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+    public void playStart(View view){
+        try{
+        releasePlayer();
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setDataSource(fileName);
+        mediaPlayer.prepare();
+        mediaPlayer.start();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 }
