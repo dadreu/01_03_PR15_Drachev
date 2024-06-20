@@ -24,38 +24,29 @@ public class MainActivity extends AppCompatActivity {
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
     private String fileName;
-    private Button button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        fileName = getExternalFilesDir(Environment.DIRECTORY_MUSIC) + "/recording_" +  ".3gpp";
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        fileName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/record.3gpp";
     }
 
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        releasePlayer();
-        releaseRecorder();
-    }
+
     private void releaseRecorder(){
         if(mediaRecorder != null){
             mediaRecorder.release();
             mediaRecorder = null;
         }
     }
-    public void recordStart(View view){
-        try{
+    public void recordStart(View v) {
+        try {
             releaseRecorder();
             File outFile = new File(fileName);
-            if(outFile.exists()) outFile.delete();
+            if (outFile.exists()) {
+                outFile.delete();
+            }
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -63,13 +54,11 @@ public class MainActivity extends AppCompatActivity {
             mediaRecorder.setOutputFile(fileName);
             mediaRecorder.prepare();
             mediaRecorder.start();
-            button.setEnabled(true);
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-    public void recordStop(View view){
+    public void recordStop(View v){
         if(mediaRecorder != null) {
             mediaRecorder.stop();
         }
@@ -80,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
-    public void playStart(View view){
+    public void playStart(View v){
         try{
         releasePlayer();
         mediaPlayer = new MediaPlayer();
@@ -95,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
     public void playStop(View view){
         if(mediaPlayer != null)
             mediaPlayer.stop();
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        releasePlayer();
+        releaseRecorder();
     }
 
 }
